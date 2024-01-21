@@ -33,17 +33,17 @@ public class SecurityConfig {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .requestMatchers("/css/**").permitAll()
-                .requestMatchers("/register.jsp").permitAll()
-                .requestMatchers("/auth/**").permitAll()
-                .requestMatchers("/home").permitAll()
+                .requestMatchers("/register.jsp", "/home.jsp","/utils/**", "/css/**", "/auth/**", "/home").permitAll()
                 .requestMatchers("/addPost").hasAnyRole("ADMIN", "USER")
                 .anyRequest().authenticated()
                 .and()
                 .formLogin(form -> form
                 .loginPage("/login.jsp").permitAll()
                 .loginProcessingUrl("/auth/login")
-                        .defaultSuccessUrl("/home"))
+                                .defaultSuccessUrl("/home")
+                                .failureUrl("/auth/loginPage")
+
+                )
                 .exceptionHandling(handling -> handling.accessDeniedPage("/auth/loginPage"))
                 .httpBasic();
 

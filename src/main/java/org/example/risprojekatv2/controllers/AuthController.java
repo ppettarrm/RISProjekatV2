@@ -14,6 +14,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -79,7 +80,16 @@ public class AuthController {
         }
 
         korisnikRepository.save(k);
-        return "home";
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            registerDTO.getUsername(), registerDTO.getPassword()));
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            return "redirect:/home";
+        } catch (Exception ex){
+            ex.printStackTrace();
+            return "register";
+        }
     }
 
     @GetMapping("/logout")
