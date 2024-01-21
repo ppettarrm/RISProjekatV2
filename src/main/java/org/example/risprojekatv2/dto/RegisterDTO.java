@@ -8,8 +8,8 @@ public class RegisterDTO {
 
     private String username;
     private String password;
+    private String confirmPassword;
     private MultipartFile userImage;
-    private String description;
     private String mail;
 
 }

@@ -1,0 +1,116 @@
+/* styles/login.css */
+
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+body {
+    background: linear-gradient(to bottom, #1e1e1e, #333) no-repeat;
+    color: #fff;
+    font-family: Arial, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.prijava {
+    background-color: #333;
+    padding: 20px;
+    border-radius: 8px;
+    width: 300px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.title {
+    font-size: 32px; /* Increased font size */
+    font-weight: bold;
+    text-align: center;
+    padding-bottom: 2.5rem;
+    color: #fff;
+    margin: 0 auto; /* Center the div horizontally */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.loginlabel {
+    display: block;
+    margin-bottom: 8px;
+    color: #fff;
+}
+
+.logininput {
+    width: 100%;
+    padding: 12px; /* Increased padding for more volume */
+    margin-bottom: 16px;
+    box-sizing: border-box;
+    background: linear-gradient(to bottom, #444, #555) no-repeat;
+    color: #fff;
+    border: 1px solid #666;
+    border-radius: 4px;
+    transition: background 0.3s, box-shadow 0.3s; /* Added box-shadow transition */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Added box shadow */
+}
+
+.button-container {
+    margin-bottom: 16px;
+}
+
+.logininput[type="submit"],
+.signup-button,
+.guest-button a {
+    display: block;
+    width: 100%;
+    text-align: center;
+    text-decoration: none;
+    padding: 12px;
+    border-radius: 4px;
+}
+
+.logininput[type="submit"] {
+    background: linear-gradient(to bottom, #1f78ff, #0056b3) no-repeat; /* Modern color scheme for Log in */
+    cursor: pointer;
+}
+
+.logininput[type="submit"]:hover {
+    background: linear-gradient(to bottom, #0056b3, #004080) no-repeat;
+}
+
+.signup-button {
+    background: linear-gradient(to bottom, #4caf50, #45a049) no-repeat; /* Modern color scheme for Sign up */
+    cursor: pointer;
+    transition: background 0.3s;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Added box shadow */
+}
+
+.signup-button:hover {
+    background: linear-gradient(to bottom, #45a049, #4caf50) no-repeat;
+}
+
+/* Continue as guest button */
+.guest-button a {
+    background: linear-gradient(to bottom, #e7e7e7, #ccc) !important; /* Adjusted color for Continue as guest */
+    color: #333 !important; /* Adjusted text color for Continue as guest */
+    cursor: pointer;
+    transition: background 0.3s;
+    text-align: center;
+    text-decoration: none;
+    padding: 12px;
+    border-radius: 4px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Added box shadow */
+}
+
+.guest-button a:hover {
+    background: linear-gradient(to bottom, #ccc, #b3b3b3) !important;
+}
+
+/* Forgot your password link */
+.loginlabel a {
+    color: #fff;
+    text-decoration: none;
+}
+
+.loginlabel a:hover {
+    text-decoration: underline;
+}

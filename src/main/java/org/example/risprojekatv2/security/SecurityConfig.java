@@ -33,9 +33,18 @@ public class SecurityConfig {
         http
                 .csrf().disable()
                 .authorizeRequests()
+                .requestMatchers("/css/**").permitAll()
+                .requestMatchers("/register.jsp").permitAll()
                 .requestMatchers("/auth/**").permitAll()
+                .requestMatchers("/home").permitAll()
+                .requestMatchers("/addPost").hasAnyRole("ADMIN", "USER")
                 .anyRequest().authenticated()
                 .and()
+                .formLogin(form -> form
+                .loginPage("/login.jsp").permitAll()
+                .loginProcessingUrl("/auth/login")
+                        .defaultSuccessUrl("/home"))
+                .exceptionHandling(handling -> handling.accessDeniedPage("/auth/loginPage"))
                 .httpBasic();
 
         return http.build();

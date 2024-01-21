@@ -26,8 +26,6 @@ public class Korisnik {
     @Column(name="user_image")
     private byte[] userImage;
 
-    private String description;
-
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "korisnik_role", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
                inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))

@@ -1,0 +1,213 @@
+/* styles/posts.css */
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background: linear-gradient(to bottom, #1e1e1e, #333) no-repeat;
+    color: #fff;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+
+.header {
+    width: 100%;
+    background-color: #333;
+    color: #fff;
+    padding: 10px;
+    display: flex;
+    position: fixed;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header img {
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.logininput {
+    text-decoration: none;
+    padding: 15px;
+    margin-right: 2rem;
+    margin-bottom: 16px;
+    box-sizing: border-box;
+    background: linear-gradient(to bottom, #444, #555) no-repeat;
+    color: #fff;
+    border: 1px solid #666;
+    border-radius: 4px;
+    transition: background 0.3s, box-shadow 0.3s;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.logininput:hover {
+    background: linear-gradient(to bottom, #0056b3, #004080) no-repeat;
+}
+
+.logo {
+    width: 4rem;
+    height: 4rem;
+}
+
+.logo:hover {
+    padding-left: 1rem;
+    transition-delay: 0.5s;
+    transition-duration: 0.7s;
+    transform-style: revert;
+}
+
+.posts {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 120px;
+    min-height: 45rem;
+}
+
+.post {
+    width: 40%;
+    margin: 10px;
+    background-color: #333;
+    color: white;
+    border: solid 2px #333;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out;
+}
+
+
+.post img {
+    width: 100%;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.post p {
+    padding: 15px;
+    color: #333;
+}
+
+.postHeader {
+    padding: 10px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #333;
+    color: white;
+    border-bottom: solid 5px #ffffff;
+    margin-bottom: 1rem;
+}
+
+.postBody{
+    padding: 10px;
+    display: block;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #333;
+    color: white;
+    border-bottom: solid 5px #ffffff;
+    margin-bottom: 1rem;
+}
+
+
+.profile-link {
+    text-decoration: none;
+    font-size: 1.5rem;
+    color: #ffffff;
+}
+
+.postText code{
+    max-width: 100%; /* Ensure full width */
+    white-space: break-spaces;
+}
+
+.postActions {
+    display: flex;
+    justify-content: space-around;
+    padding: 10px;
+    margin-right: 0.5rem;
+    margin-left: 0.5rem;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    background-color: #333;
+    color: white;
+}
+
+.action-button {
+    background: linear-gradient(to bottom, #1f78ff, #0056b3) no-repeat;
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.action-button:hover {
+    background: linear-gradient(to bottom, #0056b3, #004080) no-repeat;
+}
+
+.footer {
+    width: 100%;
+    background-color: #1e1e1e;
+    color: #fff;
+    margin-bottom: 0;
+    display: inline-block;
+    height: 20rem;
+}
+
+.profile-info {
+    display: inline-block;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-top: 8%;
+    margin-bottom: 20px; /* Add margin at the bottom */
+}
+
+.profile-picture {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-bottom: 10px;
+    border: 3px solid #fff; /* White border for profile picture */
+}
+
+.profile-picture img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.profile-username {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #fff;
+    margin-bottom: 5px;
+}
+
+.profile-description {
+    font-size: 1.2rem;
+    color: #ccc;
+    margin-bottom: 15px;
+    max-width: 300px; /* Limiting the width of description */
+}
+
+.follow-button {
+    background: linear-gradient(to bottom, #f09433, #e6683c) no-repeat; /* Instagram-like gradient */
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.follow-button:hover {
+    background: linear-gradient(to bottom, #e6683c, #d23e49) no-repeat; /* Darker gradient on hover */
+}

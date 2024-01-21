@@ -15,10 +15,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -42,19 +39,25 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginDTO loginDTO){
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        loginDTO.getUsername(), loginDTO.getPassword()));
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        return new ResponseEntity<>("Successfuly logged in", HttpStatus.OK);
+    public String login(@ModelAttribute LoginDTO loginDTO){
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            loginDTO.getUsername(), loginDTO.getPassword()));
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            return "home";
+        } catch (Exception ex){
+            ex.printStackTrace();
+            return "register";
+        }
     }
 
     @PostMapping("/register")
-    public String register(@RequestBody RegisterDTO registerDTO){
-        if(korisnikRepository.existsByUsername(registerDTO.getUsername())){
-            return "error";
+    public String register(@ModelAttribute RegisterDTO registerDTO){
+        if(!registerDTO.getPassword().equals(registerDTO.getConfirmPassword()) ||
+                korisnikRepository.existsByUsername(registerDTO.getUsername()) ||
+                korisnikRepository.existsByMail(registerDTO.getMail())){
+            return "register";
         }
 
         Korisnik k = new Korisnik();
@@ -63,13 +66,35 @@ public class AuthController {
         Role roles = roleRepository.findByName("user").get();
         k.setRoles(Collections.singletonList(roles));
         k.setMail(registerDTO.getMail());
-        k.setDescription(registerDTO.getDescription());
+        if(registerDTO.getUserImage() != null){
+            String fileName = registerDTO.getUserImage().getOriginalFilename();
+            if(fileName != null && !fileName.toLowerCase().matches(".*\\.(png|jpeg|jpg)"))
+                return "register";
+        }
+
         try {
             k.setUserImage(registerDTO.getUserImage().getBytes());
         } catch (IOException ex){
-            k.setUserImage("".getBytes());
+            return "register";
         }
+
         korisnikRepository.save(k);
-        return "index";
+        return "home";
+    }
+
+    @GetMapping("/logout")
+    public String logout(){
+        SecurityContextHolder.getContext().setAuthentication(null);
+        return "redirect:/auth/loginPage";
+    }
+
+    @GetMapping("/registerPage")
+    public String getRegisterPage(){
+        return "register";
+    }
+
+    @GetMapping("/loginPage")
+    public String getLoginPage(){
+        return "login";
     }
 }
