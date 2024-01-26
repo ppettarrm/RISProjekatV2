@@ -120,6 +120,11 @@ body {
     color: #ffffff;
 }
 
+.postText{
+    display: inline-block;
+    text-align: left;
+}
+
 .postText code{
     max-width: 100%; /* Ensure full width */
     white-space: break-spaces;

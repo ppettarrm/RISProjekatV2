@@ -1,5 +1,6 @@
 package org.example.risprojekatv2.controllers;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.example.risprojekatv2.dto.LoginDTO;
 import org.example.risprojekatv2.dto.RegisterDTO;
 import org.example.risprojekatv2.models.Korisnik;
@@ -40,12 +41,13 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public String login(@ModelAttribute LoginDTO loginDTO){
+    public String login(@ModelAttribute LoginDTO loginDTO, HttpServletRequest req){
         try {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
                             loginDTO.getUsername(), loginDTO.getPassword()));
             SecurityContextHolder.getContext().setAuthentication(authentication);
+            req.getSession().setAttribute("logged", korisnikRepository.getKorisnikByUsername(loginDTO.getUsername()));
             return "home";
         } catch (Exception ex){
             ex.printStackTrace();
@@ -54,7 +56,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public String register(@ModelAttribute RegisterDTO registerDTO){
+    public String register(@ModelAttribute RegisterDTO registerDTO, HttpServletRequest req){
         if(!registerDTO.getPassword().equals(registerDTO.getConfirmPassword()) ||
                 korisnikRepository.existsByUsername(registerDTO.getUsername()) ||
                 korisnikRepository.existsByMail(registerDTO.getMail())){
@@ -85,6 +87,7 @@ public class AuthController {
                     new UsernamePasswordAuthenticationToken(
                             registerDTO.getUsername(), registerDTO.getPassword()));
             SecurityContextHolder.getContext().setAuthentication(authentication);
+            req.getSession().setAttribute("logged", k);
             return "redirect:/home";
         } catch (Exception ex){
             ex.printStackTrace();

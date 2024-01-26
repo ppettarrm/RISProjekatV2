@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,31 +9,39 @@
 </head>
 <body>
 <div class="pocetna">
+
     <%@ include file="utils/header.jsp" %>
     <div class="posts">
-        <c:forEach items="${posts}" var="p">
+        <c:if test="${!empty post}">
             <div class="post">
                 <div class="postHeader">
-                    <a href="/Codegram/profile/${p.korisnik.username}" class="profile-link">
-                        <label>${p.korisnik.username}</label>
+                    <a href="/Codegram/profile/${post.korisnik.username}" class="profile-link">
+                        <label>${post.korisnik.username}</label>
                     </a>
                 </div>
-                <div class="postBody" onclick="location.href='/Codegram/post/${p.id}'">
-                    <c:if test="${!empty p.slika}">
-                        <img src="data:image/jpeg;base64,${images[p.id]}" alt="Post Image"/>
+                <div class="postBody">
+                    <c:if test="${!empty post.slika}">
+                        <img src="data:image/jpeg;base64,${images}" alt="Post Image"/>
                     </c:if>
-                    <pre class="postText"><code><c:out value="${p.opis}" escapeXml="true" /></code></pre>
+                    <pre class="postText" style="color: white">
+                        <code>
+                            <c:out value="${post.opis}" escapeXml="true"/>
+                        </code>
+                    </pre>
                 </div>
                 <div class="postActions">
                     <button class="action-button">Like</button>
                     <button class="action-button">Comment</button>
                     <button class="action-button">Save</button>
-<%--                    <c:if test="${korisnik.id == p.userid.id}">--%>
-<%--                        <button class="action-button">Delete</button>--%>
-<%--                    </c:if>--%>
+                    <c:if test="${korisnik.id == post.korisnik.id}">
+                        <button class="action-button">Delete</button>
+                    </c:if>
                 </div>
             </div>
-        </c:forEach>
+        </c:if>
+        <c:if test="${empty post}">
+            <h1>Post does not exists!</h1>
+        </c:if>
     </div>
 </div>
 <%@ include file="utils/footer.jsp" %>
