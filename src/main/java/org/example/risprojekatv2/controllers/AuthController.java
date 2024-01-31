@@ -4,11 +4,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.example.risprojekatv2.dto.ConfirmDTO;
 import org.example.risprojekatv2.dto.LoginDTO;
 import org.example.risprojekatv2.dto.RegisterDTO;
+import org.example.risprojekatv2.dto.ResetDTO;
 import org.example.risprojekatv2.models.Korisnik;
 import org.example.risprojekatv2.models.Role;
 import org.example.risprojekatv2.repositories.KorisnikRepository;
 import org.example.risprojekatv2.repositories.RoleRepository;
 import org.example.risprojekatv2.services.MailService;
+import org.example.risprojekatv2.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +18,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.stereotype.Controller;
@@ -23,6 +26,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.UUID;
 
 @Controller
 @RequestMapping("/auth")
@@ -33,15 +37,17 @@ public class AuthController {
     private RoleRepository roleRepository;
     private PasswordEncoder passwordEncoder;
     private MailService mailService;
+    private UserService userService;
 
     @Autowired
     public AuthController(AuthenticationManager authenticationManager, KorisnikRepository korisnikRepository,
-                          RoleRepository roleRepository, PasswordEncoder passwordEncoder, MailService mailService) {
+                          RoleRepository roleRepository, PasswordEncoder passwordEncoder, MailService mailService, UserService userService) {
         this.authenticationManager = authenticationManager;
         this.korisnikRepository = korisnikRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
         this.mailService = mailService;
+        this.userService = userService;
     }
 
     @PostMapping("/login")
@@ -120,12 +126,34 @@ public class AuthController {
     }
 
     @GetMapping("/registerPage")
-    public String getRegisterPage(){
+    public String getRegisterPage(HttpServletRequest request){
+        request.getSession().removeAttribute("message");
         return "register";
     }
 
     @GetMapping("/loginPage")
-    public String getLoginPage(){
+    public String getLoginPage(HttpServletRequest request){
+        request.getSession().removeAttribute("message");
         return "login";
+    }
+
+    @GetMapping("/resetPasswordPage")
+    public String getResetPage(){ return "forgotPassword"; }
+
+    @PostMapping("/reset")
+    public String reset(@ModelAttribute ResetDTO resetDTO, HttpServletRequest req){
+        req.getSession().removeAttribute("message");
+        Korisnik k = korisnikRepository.getKorisnikByMail(resetDTO.getMail());
+        if(k == null) {
+            req.getSession().setAttribute("message", "There is no user with this mail!");
+            return "forgotPassword";
+        }
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        UUID randomUUID = UUID.randomUUID();
+        String newPassword = randomUUID.toString().replaceAll("_", "");
+        userService.update(k.getMail(), encoder.encode(newPassword));
+        String message = "Dear " + k.getUsername() + ",\n\nYour password has been reset.\nYour new password is: " + newPassword + "\n\nKindly,\nCodegram";
+        mailService.sendEmail(k.getMail(), "Codegram: Password has been reset", message);
+        return "redirect: /loginPage";
     }
 }

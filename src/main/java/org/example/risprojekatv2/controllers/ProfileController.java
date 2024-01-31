@@ -35,6 +35,8 @@ public class ProfileController {
             return "redirect:/home";
         }
         req.getSession().setAttribute("user", k);
+        req.getSession().setAttribute("followers", userService.getFollowers(k).size());
+        req.getSession().setAttribute("following", userService.getFollowing(k).size());
         byte[] imageBytes = k.getUserImage();
         String base64Image = Base64.getEncoder().encodeToString(imageBytes);
         req.setAttribute("base64Image", base64Image);

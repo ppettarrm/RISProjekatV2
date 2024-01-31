@@ -25,7 +25,21 @@
         <div class="profile-username">
             ${user.username}
         </div>
-        <button class="follow-button">Follow</button>
+        <div style="display: flex;">
+            <div style="display: inline">
+                <h3>${followers}</h3>
+                <h5>Followers</h5>
+            </div>
+            <div style="width: 10px"></div>
+            <div style="display: inline">
+                <h3>${following}</h3>
+                <h5>Following</h5>
+            </div>
+        </div>
+        <iframe name="hiddenframe" hidden></iframe>
+        <form action="/Codegram/follow?username=${user.username}" method="post" target="hiddenframe">
+            <button class="action-button">Follow</button>
+        </form>
     </div>
 
 

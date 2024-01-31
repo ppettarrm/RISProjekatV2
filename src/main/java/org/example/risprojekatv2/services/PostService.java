@@ -7,6 +7,7 @@ import org.example.risprojekatv2.repositories.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,7 +27,9 @@ public class PostService {
 
 
     public List<Post> getPosts(){
-        return pr.findAll();
+        List<Post> posts = pr.findAll();
+        Collections.reverse(posts);
+        return posts;
     }
 
     public Optional<Post> getPostByID(int id){ return pr.findById(id); }
@@ -53,7 +56,8 @@ public class PostService {
     }
 
     public List<Post> getSavedPosts(Integer uid){
-        return pr.getSavedPosts(uid);
+        List<Post> posts = pr.getSavedPosts(uid);
+        return posts;
     }
 
 

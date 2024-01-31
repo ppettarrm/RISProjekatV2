@@ -11,7 +11,7 @@
         <div>
             <form action="/Codegram/search/" method="post">
                 <input type="text" class="logininput" name="search">
-                <input type="submit" class="action-button" value="Search">
+                <input type="submit" class="logininput" value="Search">
             </form>
         </div>
         <div style="align-items: baseline">
