@@ -6,6 +6,7 @@
     <meta charset="UTF-8">
     <title>Feed</title>
     <link rel="stylesheet" type="text/css" href="<c:url value="/css/posts.css" />">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
 <div class="pocetna">
@@ -13,6 +14,7 @@
     <%@ include file="utils/header.jsp" %>
     <div class="posts">
         <c:if test="${!empty post}">
+            <iframe name="hiddenframe${post.id}" hidden></iframe>
             <div class="post">
                 <div class="postHeader">
                     <a href="/Codegram/profile/${post.korisnik.username}" class="profile-link">
@@ -29,14 +31,18 @@
                         </code>
                     </pre>
                 </div>
+                <sec:authorize access="isAuthenticated()">
                 <div class="postActions">
-                    <button class="action-button">Like</button>
+                    <form action="/Codegram/postAction/like?post_id=${ppst.id}" method="post" target="hiddenframe${post.id}">
+                        <button class="action-button"><i class="fa fa-thumbs-up"></i></button>
+                    </form>
                     <button class="action-button">Comment</button>
                     <button class="action-button">Save</button>
                     <c:if test="${korisnik.id == post.korisnik.id}">
                         <button class="action-button">Delete</button>
                     </c:if>
                 </div>
+                </sec:authorize>
             </div>
         </c:if>
         <c:if test="${empty post}">

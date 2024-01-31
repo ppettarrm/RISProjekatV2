@@ -35,7 +35,7 @@
             </c:if>
         </c:if>
         <c:if test="${!empty code}">
-            <form action="/Codegram/oauth/confirm" method="POST" enctype="multipart/form-data">
+            <form action="/Codegram/auth/confirm" method="POST" enctype="multipart/form-data">
                 <label class="loginlabel">Code:</label>
                 <input class="logininput" type="number" name="code" min="1000" max="9999" required/>
                 <input class="logininput" type="submit" value="Confirm"/>

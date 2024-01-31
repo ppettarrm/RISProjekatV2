@@ -33,9 +33,9 @@ public class SecurityConfig {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .requestMatchers("/addPost", "/addPost.jsp").hasAnyRole("ADMIN", "USER")
+                .requestMatchers("/addPost", "/addPost.jsp", "/postAction/**", "/saved.jsp", "/saved/**").hasAnyRole("ADMIN", "USER")
                 .requestMatchers("/register.jsp", "/home.jsp","/utils/**", "/css/**", "/auth/**", "/home", "/post.jsp",
-                        "/post/**", "/profile.jsp", "/profile/**").permitAll()
+                        "/post/**", "/profile.jsp", "/profile/**", "/search.jsp", "/search/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin(form -> form

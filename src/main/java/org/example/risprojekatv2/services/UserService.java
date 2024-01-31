@@ -38,4 +38,8 @@ public class UserService {
 
     public void update(String mail, String novaLozinka){ kr.forgotPassword(mail, novaLozinka);}
 
+    public List<Korisnik> getAllKorisnik(){
+        return kr.findAll();
+    }
+
 }

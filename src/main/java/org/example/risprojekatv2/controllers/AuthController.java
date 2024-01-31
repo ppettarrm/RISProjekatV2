@@ -1,12 +1,14 @@
 package org.example.risprojekatv2.controllers;
 
 import jakarta.servlet.http.HttpServletRequest;
+import org.example.risprojekatv2.dto.ConfirmDTO;
 import org.example.risprojekatv2.dto.LoginDTO;
 import org.example.risprojekatv2.dto.RegisterDTO;
 import org.example.risprojekatv2.models.Korisnik;
 import org.example.risprojekatv2.models.Role;
 import org.example.risprojekatv2.repositories.KorisnikRepository;
 import org.example.risprojekatv2.repositories.RoleRepository;
+import org.example.risprojekatv2.services.MailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,14 +32,16 @@ public class AuthController {
     private KorisnikRepository korisnikRepository;
     private RoleRepository roleRepository;
     private PasswordEncoder passwordEncoder;
+    private MailService mailService;
 
     @Autowired
     public AuthController(AuthenticationManager authenticationManager, KorisnikRepository korisnikRepository,
-                          RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
+                          RoleRepository roleRepository, PasswordEncoder passwordEncoder, MailService mailService) {
         this.authenticationManager = authenticationManager;
         this.korisnikRepository = korisnikRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
+        this.mailService = mailService;
     }
 
     @PostMapping("/login")
@@ -47,7 +51,6 @@ public class AuthController {
                     new UsernamePasswordAuthenticationToken(
                             loginDTO.getUsername(), loginDTO.getPassword()));
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            req.getSession().setAttribute("logged", korisnikRepository.getKorisnikByUsername(loginDTO.getUsername()));
             return "home";
         } catch (Exception ex){
             ex.printStackTrace();
@@ -66,8 +69,6 @@ public class AuthController {
         Korisnik k = new Korisnik();
         k.setUsername(registerDTO.getUsername());
         k.setPassword(passwordEncoder.encode(registerDTO.getPassword()));
-        Role roles = roleRepository.findByName("user").get();
-        k.setRoles(Collections.singletonList(roles));
         k.setMail(registerDTO.getMail());
         if(registerDTO.getUserImage() != null){
             String fileName = registerDTO.getUserImage().getOriginalFilename();
@@ -81,18 +82,35 @@ public class AuthController {
             return "register";
         }
 
-        korisnikRepository.save(k);
+        int confirmationCode = (int)(Math.random() * 8999 + 1000);
+        req.getSession().setAttribute("code", confirmationCode);
+        req.getSession().setAttribute("confirmationAccount", k);
+        String message = "Dear " + k.getUsername() + ",\n\nYour confirmation code is " + confirmationCode + "\n\nKindly,\nCodegram";
+        mailService.sendEmail(k.getMail(), "Codegram: Confirm email", message);
+        return "register";
+    }
+
+    @PostMapping("/confirm")
+    public String confirmMail(@ModelAttribute ConfirmDTO confirmDTO, HttpServletRequest req){
+        Korisnik k = (Korisnik) req.getSession().getAttribute("confirmationAccount");
+        int code = (int) req.getSession().getAttribute("code");
+        if(confirmDTO.getCode() != code){
+            return "register";
+        }
+        req.getSession().removeAttribute("code");
+        req.getSession().removeAttribute("confirmationAccount");
+        Role roles = roleRepository.findByName("user").get();
+        k.setRoles(Collections.singletonList(roles));
         try {
-            Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                            registerDTO.getUsername(), registerDTO.getPassword()));
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-            req.getSession().setAttribute("logged", k);
-            return "redirect:/home";
+            korisnikRepository.save(k);
+            String message = "Dear " + k.getUsername() + ",\n\nYour account has been created.\nThank you for joining Codegram community!\n\nKindly,\nCodegram";
+            mailService.sendEmail(k.getMail(), "Codegram: Account has been created!", message);
+            return "redirect:/auth/loginPage";
         } catch (Exception ex){
             ex.printStackTrace();
             return "register";
         }
+
     }
 
     @GetMapping("/logout")

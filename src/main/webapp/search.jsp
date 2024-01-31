@@ -5,7 +5,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Feed</title>
+    <title>Search</title>
     <link rel="stylesheet" type="text/css" href="<c:url value="/css/posts.css" />">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
@@ -13,6 +13,27 @@
 <div class="pocetna">
     <%@ include file="utils/header.jsp" %>
     <div class="posts">
+        <c:if test="${empty users}">
+            <h1>No user found!</h1><br/>
+        </c:if>
+        <c:if test="${!empty users}">
+            <h1>Users:</h1><br/>
+        </c:if>
+        <c:forEach items="${users}" var="k">
+            <div class="post">
+                <div class="postHeader">
+                    <a href="/Codegram/profile/${k.username}" class="profile-link">
+                        <label>${k.username}</label>
+                    </a>
+                </div>
+            </div>
+        </c:forEach>
+        <c:if test="${!empty posts}">
+            <h1>Posts:</h1><br/>
+        </c:if>
+        <c:if test="${empty posts}">
+            <h1>No post found!</h1><br/>
+        </c:if>
         <c:forEach items="${posts}" var="p">
             <iframe name="hiddenframe${p.id}" hidden></iframe>
             <div class="post">
