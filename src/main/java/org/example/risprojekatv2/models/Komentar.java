@@ -16,8 +16,9 @@ public class Komentar {
     @Column(name = "komentar_id", nullable = false)
     private Long id;
 
-    @Column(name = "userid")
-    private Integer userid;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "userid", referencedColumnName = "id")
+    private Korisnik korisnik;
 
     @Column(name = "postid")
     private Long postid;

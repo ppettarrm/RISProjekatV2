@@ -32,21 +32,38 @@
                     </pre>
                 </div>
                 <sec:authorize access="isAuthenticated()">
-                <div class="postActions">
-                    <form action="/Codegram/postAction/like?post_id=${ppst.id}" method="post" target="hiddenframe${post.id}">
-                        <button class="action-button"><i class="fa fa-thumbs-up"></i></button>
-                    </form>
-                    <button class="action-button">Comment</button>
-                    <button class="action-button">Save</button>
-                    <c:if test="${korisnik.id == post.korisnik.id}">
-                        <button class="action-button">Delete</button>
-                    </c:if>
-                </div>
+                    <div class="postActions">
+                        <form action="/Codegram/postAction/like?post_id=${post.id}" method="post"
+                              target="hiddenframe${p.id}">
+                            <button class="action-button">Like <i class="fa fa-thumbs-up"></i></button>
+                        </form>
+                        <form action="/Codegram/postAction/save?post_id=${post.id}" method="post"
+                              target="hiddenframe${p.id}">
+                            <button class="action-button">Save <i class="fa fa-save"></i></button>
+                        </form>
+                        <form action="/Codegram/postAction/delete?post_id=${post.id}" method="post">
+                            <button class="action-button">Delete</button>
+                        </form>
+                    </div>
+                    <div class="comments">
+                        <div class="add-comment">
+                            <form action="/Codegram/postAction/comment?post_id=${p.id}" method="post">
+                                <input class="logininput" type="text" name="comment">
+                                <input class="action-button" type="submit" value="Add comment">
+                            </form>
+                        </div>
+                        <c:forEach items="${comments}" var="comment">
+                            <div class="comment">
+                                <span class="author">${comment.korisnik.username}:</span>
+                                <div class="content"><c:out value="${comment.tekst}" escapeXml="true"/></div>
+                            </div>
+                        </c:forEach>
+                    </div>
                 </sec:authorize>
             </div>
         </c:if>
         <c:if test="${empty post}">
-            <h1>Post does not exists!</h1>
+            <h1>Post does not exist!</h1>
         </c:if>
     </div>
 </div>

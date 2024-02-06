@@ -16,6 +16,9 @@
         </div>
         <div style="align-items: baseline">
             <button onclick="location.href='/Codegram/home'" class="logininput" style="display: inline-block;">Home</button>
+            <sec:authorize access="hasRole('ADMIN')">
+                <button onclick="location.href='/Codegram/admin'" class="logininput" style="display: inline-block;">Admin</button>
+            </sec:authorize>
             <sec:authorize access="isAuthenticated()">
                 <button onclick="location.href='/Codegram/addPost/'" class="logininput" style="display: inline-block;">Add post</button>
                 <button onclick="location.href='/Codegram/saved/'" class="logininput" style="display: inline-block;">Saved posts</button>

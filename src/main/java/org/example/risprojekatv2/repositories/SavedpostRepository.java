@@ -13,4 +13,6 @@ public interface SavedpostRepository extends JpaRepository<Savedpost, Integer> {
     public Savedpost getSavedpost(@Param("pid") Long pid, @Param("uid")Integer uid);
 
     public List<Savedpost> getSavedpostsByUserid(Integer uid);
+
+    public void deleteAllByPostid(Long id);
 }

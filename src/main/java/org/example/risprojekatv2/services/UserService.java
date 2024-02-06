@@ -81,4 +81,8 @@ public class UserService {
         return filteredPracenja;
     }
 
+    public List<Pracenje> getAllFollowings(){
+        return pr.findAll();
+    }
+
 }

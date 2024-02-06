@@ -10,4 +10,6 @@ public interface LikepostRepository extends JpaRepository<Likepost, Integer> {
     @Query("Select lk from Likepost lk where lk.postid = :pid and lk.userid = :uid")
     public Likepost getLikepost(@Param("pid") Long pid, @Param("uid")Integer uid);
 
+    public void deleteAllByPostid(Long id);
+
 }

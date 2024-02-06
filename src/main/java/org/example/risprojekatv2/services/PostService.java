@@ -6,6 +6,7 @@ import org.example.risprojekatv2.models.Post;
 import org.example.risprojekatv2.repositories.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
@@ -23,6 +24,9 @@ public class PostService {
 
     @Autowired
     SavedpostRepository spr;
+
+    @Autowired
+    KomentarRepository kr;
 
 
 
@@ -60,5 +64,21 @@ public class PostService {
         return posts;
     }
 
+    public void saveKomentar(Komentar k){
+        kr.save(k);
+    }
+
+    public List<Komentar> getComments(Post p){
+        return kr.getKomentarsByPostid(p.getId());
+    }
+
+
+    @Transactional
+    public void deletePost(Post p){
+        lpr.deleteAllByPostid(p.getId());
+        spr.deleteAllByPostid(p.getId());
+        kr.deleteAllByPostid(p.getId());
+        pr.delete(p);
+    }
 
 ;}

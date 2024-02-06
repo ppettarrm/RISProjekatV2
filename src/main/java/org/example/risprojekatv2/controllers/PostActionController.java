@@ -1,17 +1,19 @@
 package org.example.risprojekatv2.controllers;
 
-import org.example.risprojekatv2.models.Korisnik;
-import org.example.risprojekatv2.models.Likepost;
-import org.example.risprojekatv2.models.Post;
-import org.example.risprojekatv2.models.Savedpost;
+import jakarta.servlet.http.HttpServletRequest;
+import org.example.risprojekatv2.dto.AddCommentDTO;
+import org.example.risprojekatv2.models.*;
 import org.example.risprojekatv2.services.PostService;
 import org.example.risprojekatv2.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.time.Instant;
 
 @Controller
 @RequestMapping("/postAction")
@@ -43,6 +45,41 @@ public class PostActionController {
         sp.setUserid(k.getId());
         sp.setPostid(pid);
         postService.saveSavedpost(sp);
+    }
+
+    @PostMapping("/comment")
+    public String commentPost(@ModelAttribute AddCommentDTO addCommentDTO, @RequestParam("post_id")Integer pid, HttpServletRequest req){
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        Korisnik k = userService.getKorisnikByUserName(username);
+        Post p = postService.getPostByID(pid).get();
+        if(k == null || p == null)
+            return "home";
+
+        Komentar komentar = new Komentar();
+        komentar.setKorisnik(k);
+        komentar.setTekst(addCommentDTO.getComment());
+        komentar.setPostid(p.getId());
+        komentar.setTimestamp(Instant.now());
+
+        postService.saveKomentar(komentar);
+        return "redirect:/post/" + p.getId();
+    }
+
+    @PostMapping("/delete")
+    public String deletePost(@RequestParam("post_id")Integer pid){
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        Korisnik k = userService.getKorisnikByUserName(username);
+        Post p = postService.getPostByID(pid).get();
+        if(k == null || p == null)
+            return "home";
+
+        if(k.getId() != p.getKorisnik().getId()){
+            return "home";
+        }
+
+        postService.deletePost(p);
+
+        return "home";
     }
 
 }

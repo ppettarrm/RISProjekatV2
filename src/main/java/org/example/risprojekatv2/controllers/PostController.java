@@ -37,6 +37,7 @@ public class PostController {
             }
             req.getSession().setAttribute("images", base64Image);
             req.getSession().setAttribute("post", p);
+            req.getSession().setAttribute("comments", postService.getComments(p));
         }
         return "post";
     }

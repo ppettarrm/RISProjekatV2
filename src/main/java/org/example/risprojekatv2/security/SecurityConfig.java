@@ -33,6 +33,7 @@ public class SecurityConfig {
         http
                 .csrf().disable()
                 .authorizeRequests()
+                .requestMatchers("/Codegram/admin/**", "/admin.jsp").hasRole("ADMIN")
                 .requestMatchers("/addPost", "/addPost.jsp", "/postAction/**", "/saved.jsp", "/saved/**", "/follow/**",
                           "/chat/**", "/chat.jsp").hasAnyRole("ADMIN", "USER")
                 .requestMatchers("/register.jsp", "/home.jsp","/utils/**", "/css/**", "/auth/**", "/home", "/post.jsp",

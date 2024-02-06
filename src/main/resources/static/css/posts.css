@@ -216,3 +216,28 @@ body {
 .follow-button:hover {
     background: linear-gradient(to bottom, #e6683c, #d23e49) no-repeat; /* Darker gradient on hover */
 }
+
+.comments {
+    margin-top: 20px;
+    padding: 10px;
+}
+
+.add-comment {
+    margin-bottom: 20px;
+}
+
+.comment {
+    background-color: #444;
+    color: #fff;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+.comment .author {
+    font-weight: bold;
+}
+
+.comment .content {
+    margin-top: 5px;
+}
